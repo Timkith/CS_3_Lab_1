@@ -74,11 +74,10 @@ namespace gens
         }
     };
 
+
     template <class T>
     GeneratorT<T> append(GeneratorT<T> base, T v)
     {
-        return smartptr::MakeUnique<IGenerator<T>>(std::in_place_type<AppendGenerator<T>>,
-            smartptr::MoveRef(base), smartptr::MoveRef(v));
+        return smartptr::MakeUnique<AppendGenerator<T>>(smartptr::MoveRef(base), smartptr::MoveRef(v));
     }
-
 } // namespace gens

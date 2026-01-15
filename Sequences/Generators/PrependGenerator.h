@@ -57,8 +57,7 @@ namespace gens
     template <class T>
     GeneratorT<T> prepend(GeneratorT<T> base, T v)
     {
-        return smartptr::MakeUnique<IGenerator<T>>(std::in_place_type<PrependGenerator<T>>,
-            smartptr::MoveRef(base), smartptr::MoveRef(v));
+        return smartptr::MakeUnique<PrependGenerator<T>>(smartptr::MoveRef(base), smartptr::MoveRef(v));
     }
 
 } // namespace gens

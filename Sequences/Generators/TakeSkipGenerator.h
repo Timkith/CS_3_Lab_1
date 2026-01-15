@@ -100,15 +100,13 @@ namespace gens
     template <class T>
     GeneratorT<T> take(GeneratorT<T> base, size_t count)
     {
-        return smartptr::MakeUnique<IGenerator<T>>(std::in_place_type<TakeGenerator<T>>,
-            smartptr::MoveRef(base), count);
+        return smartptr::MakeUnique<TakeGenerator<T>>(smartptr::MoveRef(base), count);
     }
 
     template <class T>
     GeneratorT<T> skip(GeneratorT<T> base, size_t count)
     {
-        return smartptr::MakeUnique<IGenerator<T>>(std::in_place_type<TakeGenerator<T>>,
-            smartptr::MoveRef(base), count);
+        return smartptr::MakeUnique<SkipGenerator<T>>(smartptr::MoveRef(base), count);
     }
 
 } // namespace gens

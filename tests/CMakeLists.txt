@@ -23,6 +23,7 @@ target_include_directories(tests PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/../Utilities
     ${CMAKE_CURRENT_SOURCE_DIR}/../Utilities/Exceptions
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sequences/Generators
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Utilities/Functors
 )
 
 add_test(NAME tests COMMAND tests)

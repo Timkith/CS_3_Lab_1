@@ -18,7 +18,7 @@ namespace containers {
         Node* tail;
         size_t size;
 
-        class LinkedListGenerator : public IGenerator<T> {
+        class LinkedListGenerator : public gens::IGenerator<T> {
             LinkedList<T>& data;
             Node* current;
             size_t pos = 0;
@@ -27,20 +27,23 @@ namespace containers {
             explicit LinkedListGenerator(LinkedList<T>& data)
                 : data(data), current(data.head) {}
 
+            gens::IGenerator<T>& Next() override {
+                if (this->HasNext()) {
+                    current = current->next;
+                    pos++;
+                    return *this;
+                }
+                throw Exceptions::IndexOutOfRange();
+            }
+
             const T& GetCurrent() const override {
-                if (current == nullptr)
+                if (pos >= data.size || current == nullptr)
                     throw Exceptions::IndexOutOfRange();
                 return current->item;
             }
 
             [[nodiscard]] bool HasNext() const override {
-                return current != nullptr;
-            }
-
-            IGenerator<T>& Next() override {
-                if (current == nullptr) throw Exceptions::IndexOutOfRange();
-                current = current->next;
-                return *this;
+                return pos < data.size && current != nullptr;
             }
         };
         using Generator = LinkedList<T>::LinkedListGenerator;

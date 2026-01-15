@@ -25,39 +25,35 @@ namespace containers {
             GeneratorT<bucket_t> _garse;
             GeneratorT<pair_t> _glist;
 
+            void MoveToNextValid() {
+                while (!_glist->HasNext() && _garse->HasNext()) {
+                    _garse->Next();
+                    if (_garse->HasNext()) {
+                        _glist = smartptr::MoveRef(_garse->GetCurrent().GetGenerator());
+                    }
+                }
+            }
+
         public:
             explicit HashMapGenerator(HashMap &map) : _garse(smartptr::MoveRef(map._arr.GetGenerator())),
                                                       _glist(smartptr::MoveRef(map._arr[0].GetGenerator())) {
-                while (_garse->HasNext()) {
-                    auto &bucket = _garse->GetCurrent();
-                    auto currentBucketGen = bucket.GetGenerator();
-                    if (currentBucketGen->HasNext()) {
-                        _glist = smartptr::MoveRef(currentBucketGen);
-                        return;
-                    }
-                    _garse->Next();
+                if (!_glist->HasNext()) {
+                    MoveToNextValid();
                 }
             }
 
             IGenerator<pair_t> &Next() override {
                 if (!HasNext()) throw Exceptions::IndexOutOfRange();
-                if (_glist->HasNext()) {
-                    _glist->Next();
-                    return *this;
+
+                _glist->Next();
+
+                if (!_glist->HasNext()) {
+                    MoveToNextValid();
                 }
-                while (_garse->HasNext()) {
-                    auto &bucket = _garse->GetCurrent();
-                    auto currentBucketGen = bucket.GetGenerator();
-                    if (currentBucketGen->HasNext()) {
-                        _glist = smartptr::MoveRef(currentBucketGen);
-                        return *this;
-                    }
-                }
-                throw Exceptions::IndexOutOfRange();
+                return *this;
             }
 
             const pair_t &GetCurrent() const override {
-                // if (!HasNext()) throw Exceptions::IndexOutOfRange();
                 return _glist->GetCurrent();
             }
 

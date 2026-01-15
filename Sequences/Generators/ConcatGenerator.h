@@ -67,8 +67,7 @@ namespace gens
     template <class T>
     GeneratorT<T> concat(GeneratorT<T> first, GeneratorT<T> second)
     {
-        return smartptr::MakeUnique<IGenerator<T>>(std::in_place_type<ConcatGenerator<T>>,
-            smartptr::MoveRef(first), smartptr::MoveRef(second));
+        return smartptr::MakeUnique<ConcatGenerator<T>>(smartptr::MoveRef(first), smartptr::MoveRef(second));
     }
 
 } // namespace gens

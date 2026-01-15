@@ -5,6 +5,10 @@ set(CMAKE_CXX_STANDARD 23)
 
 
 add_executable(Timur_lab4 main.cpp
+        Utilities/Functors/IFunctor.h
+        Sequences/Generators/FunctorGenerator.h
+        Utilities/Functors/Fib2Functor.h
+        Utilities/Functors/FIb3Functor.h
 )
 
 target_include_directories(Timur_lab4 PUBLIC
@@ -13,6 +17,7 @@ target_include_directories(Timur_lab4 PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/Sequences/Generators
         ${CMAKE_CURRENT_SOURCE_DIR}/Utilities
         ${CMAKE_CURRENT_SOURCE_DIR}/Utilities/Exceptions
+        ${CMAKE_CURRENT_SOURCE_DIR}/Utilities/Functors
 )
 
 enable_testing()

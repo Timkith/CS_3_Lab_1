@@ -54,13 +54,13 @@ namespace types {
     };
 
 
-template <typename T1, typename T2>
-pair<T1, T2> MakePair(T1&& fst, T2&& snd) {
-    return pair<T1,T2>(smartptr::PassForward<T1>(fst), smartptr::PassForward<T2>(snd));
-}
+    template <typename T1, typename T2>
+    pair<T1, T2> MakePair(T1&& fst, T2&& snd) {
+        return pair<T1,T2>(smartptr::PassForward<T1>(fst), smartptr::PassForward<T2>(snd));
+    }
 
 
-       template<unsigned I, typename... T> struct TupleElement;
+    template<unsigned I, typename... T> struct TupleElement;
 
 
     template <unsigned I, typename Head, typename... Tail>

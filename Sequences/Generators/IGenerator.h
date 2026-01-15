@@ -13,7 +13,7 @@ namespace gens
 
         virtual IGenerator<T> &Next() = 0;
         virtual const T &GetCurrent() const = 0;
-        virtual bool HasNext() const = 0;
+        [[nodiscard]] virtual bool HasNext() const = 0;
     };
 
     template <typename T>
