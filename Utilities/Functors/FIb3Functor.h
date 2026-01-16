@@ -4,13 +4,13 @@
 
 namespace functors {
     template<class T>
-    class Fib2Functor : public IFunctor<T> {
+    class Fib3Functor : public IFunctor<T,T> {
         T _prev{};
         T _beforePrev{};
         T _beforePrevPrev{};
     public:
 
-        Fib2Functor(T beforePrevPrev,T beforePrev, T prev) : _prev(prev), _beforePrev(beforePrev),
+        Fib3Functor(T beforePrevPrev,T beforePrev, T prev) : _prev(prev), _beforePrev(beforePrev),
         _beforePrevPrev(beforePrevPrev){}
 
         T operator()() override{

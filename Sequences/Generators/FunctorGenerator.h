@@ -1,18 +1,11 @@
 #pragma once
 
 #include "IGenerator.h"
-#include <Fib2Functor.h>
 #include <IFunctor.h>
-#include <Pair.h>
-#include <IFunctor.h>
-
-
-
-
 
 
 namespace gens {
-    
+
     template<typename T>
     using IEndoFunctor = functors::IFunctor<T,T>;
 
@@ -20,9 +13,9 @@ namespace gens {
     class FunctorGenerator : public IGenerator<T>
     {
         T _current{};
-        IEndoFunctor<T> _func{};
+        IEndoFunctor<T>& _func{};
     public:
-        FunctorGenerator(IEndoFunctor<T> func) : _current(func),_func(func){}
+        FunctorGenerator(IEndoFunctor<T>& func) : _func(func){}
 
         IGenerator<T>& Next() override {
             _current = _func.eval();
@@ -33,14 +26,14 @@ namespace gens {
             return _current;
         }
 
-        [[nodiscard]] static bool HasNext() {
+        [[nodiscard]] bool HasNext() const override {
             return true;
         }
     };
 
     template<typename T>
-    functors::FunctorT<T> functor(IEndoFunctor<T> funс) {
-        return smartptr::MakeUnique<FunctorGenerator<T>>(smartptr::MoveRef(func));
+smartptr::UniquePtr<IGenerator<T>> functor(IEndoFunctor<T>& func) {
+        return smartptr::MakeUnique<FunctorGenerator<T>>(func);
     }
 }
 

@@ -14,6 +14,7 @@ add_executable(tests
         hash_map.cpp
         ../Sequences/LazySequence.h
         lazy_sequence.cpp
+        functor.cpp
 )
 
 target_include_directories(tests PUBLIC
