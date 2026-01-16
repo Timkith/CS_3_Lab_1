@@ -33,7 +33,7 @@ namespace gens
             return *this;
         }
 
-        bool HasNext() const override
+        [[nodiscard]] bool HasNext() const override
         {
             if (_prepended)
             {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SmartPtr.h>
-// #include <FunctorGenerator.h>
+#include <FunctorGenerator.h>
 
 namespace functors {
 
@@ -17,7 +17,7 @@ namespace functors {
 
     // template <typename T>
     // using FunctorT = smartptr::UniquePtr<gens::IEndoFunctor<T>>;
-    //
+
     // template<typename T, typename... Args>
     // FunctorT<T> MakeFunctor(Args&&... args) {
     //     return FunctorT<T>(T(smartptr::MoveRef(args)...));

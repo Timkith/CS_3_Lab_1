@@ -77,6 +77,11 @@ namespace containers {
         }
 
     public:
+        HashMap(Hash hash_func) : _hash(hash_func), _arr(array_t(_capacity)) {
+            for (size_t i = 0; i < _capacity; ++i)
+                _arr.Append(bucket_t{});
+        }
+
         HashMap() : _arr(array_t(_capacity)) {
             for (size_t i = 0; i < _capacity; ++i)
                 _arr.Append(bucket_t{});

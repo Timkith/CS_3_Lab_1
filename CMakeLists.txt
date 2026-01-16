@@ -9,6 +9,9 @@ add_executable(Timur_lab4 main.cpp
         Sequences/Generators/FunctorGenerator.h
         Utilities/Functors/Fib2Functor.h
         Utilities/Functors/FIb3Functor.h
+        Utilities/Person.h
+        Utilities/AlphaPtr.h
+        Utilities/HashUtils.h
 )
 
 target_include_directories(Timur_lab4 PUBLIC
