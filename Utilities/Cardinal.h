@@ -17,7 +17,7 @@ namespace cardinality{
         explicit cardinal() : _is_inf(true) {}
         explicit cardinal(W) : _is_inf(true) {}
         //конструктор копирования
-        cardinal(const cardinal& other) : _is_inf(other.is_inf()()), _value(other._value) {}
+        cardinal(const cardinal& other) : _is_inf(other.is_inf()), _value(other._value) {}
 
         //конструкторы с передаваемым значением
         explicit cardinal(const size_t value) : _is_inf(false), _value(value) {}

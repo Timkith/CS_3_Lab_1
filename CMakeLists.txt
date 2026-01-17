@@ -12,6 +12,7 @@ add_executable(Timur_lab4 main.cpp
         Utilities/Person.h
         Utilities/AlphaPtr.h
         Utilities/HashUtils.h
+        Utilities/Exceptions/LazySequenceIsInf.h
 )
 
 target_include_directories(Timur_lab4 PUBLIC

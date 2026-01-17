@@ -8,7 +8,7 @@
 #include <EmptyOption.h>
 #include <CardinalIsInf.h>
 #include <ContainerIsEmpty.h>
-
+#include <LazySequenceIsInf.h>
 
 
 
