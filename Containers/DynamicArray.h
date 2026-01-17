@@ -89,6 +89,14 @@ namespace containers
             }
         }
 
+        DynamicArray(DynamicArray<T>&& other) noexcept
+            : data(other.data), size(other.size), capacity(other.capacity)
+        {
+            other.data = nullptr;
+            other.size = 0;
+            other.capacity = 0;
+        }
+
         ~DynamicArray() override { delete[] data; }
 
         void Append(const T &item)
@@ -149,6 +157,22 @@ namespace containers
                 {
                     data[i] = other.data[i];
                 }
+            }
+            return *this;
+        }
+
+        DynamicArray& operator=(DynamicArray<T>&& other) noexcept
+        {
+            if (this != &other)
+            {
+                delete[] data;
+                data = other.data;
+                size = other.size;
+                capacity = other.capacity;
+
+                other.data = nullptr;
+                other.size = 0;
+                other.capacity = 0;
             }
             return *this;
         }

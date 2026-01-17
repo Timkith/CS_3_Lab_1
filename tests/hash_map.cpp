@@ -151,7 +151,7 @@ TEST(HashMap, ReHashWithCollisions) {
 
 TEST(HashMap, ReHashStressTest) {
     HashMap<int, int> map(10);
-    const int count = 50;
+    constexpr int count = 50;
 
     for (int i = 0; i < count; ++i) {
         map[i] = i * 10;
