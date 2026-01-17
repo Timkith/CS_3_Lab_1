@@ -17,7 +17,7 @@ namespace containers {
         using bucket_t = containers::LinkedList<pair_t>;
         using array_t = containers::DynamicArray<bucket_t>;
 
-        size_t _capacity = 10;
+        size_t _capacity = 100;
         array_t _arr;
         Hash _hash{};
 
@@ -82,6 +82,16 @@ namespace containers {
                 _arr.Append(bucket_t{});
         }
 
+        HashMap(Hash hash_func, size_t size) : _hash(hash_func), _arr(array_t(size)), _capacity(size) {
+            for (size_t i = 0; i < _capacity; ++i)
+                _arr.Append(bucket_t{});
+        }
+
+        HashMap(size_t size) : _arr(array_t(size)), _capacity(size) {
+            for (size_t i = 0; i < _capacity; ++i)
+                _arr.Append(bucket_t{});
+        }
+
         HashMap() : _arr(array_t(_capacity)) {
             for (size_t i = 0; i < _capacity; ++i)
                 _arr.Append(bucket_t{});
@@ -135,6 +145,23 @@ namespace containers {
                 _list_idx++;
             }
             throw Exceptions::IndexOutOfRange();
+        }
+
+        void ReHash(size_t s = 100 ) {
+            size_t new_capacity = _capacity+s;
+            array_t new_array_t(_capacity + s);
+            for (size_t i = 0; i < new_capacity; ++i) {
+                new_array_t.Append(bucket_t{});
+            }
+            auto it = GetGenerator();
+            while (it->HasNext()) {
+                const auto& pair = it->GetCurrent();
+                size_t new_idx = _hash(Get<0>(pair)) % new_capacity;
+                new_array_t[new_idx].Append(pair);
+                it->Next();
+            }
+            _capacity = new_capacity;
+            _arr = smartptr::MoveRef(new_array_t);
         }
 
         GeneratorT<pair_t> GetGenerator() override {

@@ -115,3 +115,64 @@ TEST(HashMap, GeneratorOutOfRange) {
     ASSERT_THROW(g->GetCurrent());
     ASSERT_THROW(g->Next());
 }
+
+TEST(HashMap, ReHashEmpty) {
+    HashMap<int, int> map(10);
+
+    ASSERT_NO_THROW(map.ReHash(50));
+    ASSERT_NO_THROW(map.ReHash(100));
+}
+
+TEST(HashMap, ReHashSmallData) {
+    HashMap<int, int> map(5);
+
+    map[1] = 10;
+    map[2] = 20;
+
+    map.ReHash(45);
+
+    ASSERT_EQ(map.at(1), 10);
+    ASSERT_EQ(map.at(2), 20);
+}
+
+TEST(HashMap, ReHashWithCollisions) {
+    HashMap<int, int> map(1);
+
+    map[10] = 100;
+    map[20] = 200;
+    map[30] = 300;
+
+    ASSERT_NO_THROW(map.ReHash(99));
+
+    ASSERT_EQ(map.at(10), 100);
+    ASSERT_EQ(map.at(20), 200);
+    ASSERT_EQ(map.at(30), 300);
+}
+
+TEST(HashMap, ReHashStressTest) {
+    HashMap<int, int> map(10);
+    const int count = 50;
+
+    for (int i = 0; i < count; ++i) {
+        map[i] = i * 10;
+    }
+
+    ASSERT_NO_THROW(map.ReHash(100));
+
+    for (int i = 0; i < count; ++i) {
+        int val = 0;
+        ASSERT_NO_THROW(val = map.at(i));
+        ASSERT_EQ(val, i * 10);
+    }
+}
+
+TEST(HashMap, InsertAfterReHash) {
+    HashMap<int, int> map(10);
+
+    map[1] = 10;
+    map.ReHash(10);
+
+    ASSERT_NO_THROW(map[2] = 20);
+    ASSERT_EQ(map.at(1), 10);
+    ASSERT_EQ(map.at(2), 20);
+}
