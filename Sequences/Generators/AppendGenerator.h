@@ -72,6 +72,8 @@ namespace gens
 
             throw Exceptions::IndexOutOfRange();
         }
+
+        [[nodiscard]] bool GetGuar() const override{ return false;}
     };
 
 

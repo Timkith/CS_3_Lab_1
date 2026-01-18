@@ -62,6 +62,8 @@ namespace gens
             
             return _second->GetCurrent();
         }
+
+        [[nodiscard]] bool GetGuar() const override{ return false;}
     };
 
     template <class T>

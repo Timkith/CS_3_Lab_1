@@ -29,6 +29,8 @@ namespace gens {
         [[nodiscard]] bool HasNext() const override {
             return true;
         }
+
+        [[nodiscard]] bool GetGuar() const override{ return true;}
     };
 
     template<typename T>

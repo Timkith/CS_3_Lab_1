@@ -45,6 +45,8 @@ namespace containers {
             [[nodiscard]] bool HasNext() const override {
                 return pos < data.size && current != nullptr;
             }
+
+            [[nodiscard]] bool GetGuar() const override{ return false;}
         };
         using Generator = LinkedList<T>::LinkedListGenerator;
 

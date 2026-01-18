@@ -48,6 +48,8 @@ namespace containers
             {
                 return pos < data.GetLength();
             };
+
+            [[nodiscard]] bool GetGuar() const override{ return false;}
         };
         using Generator = DynamicArray<T>::DynamicArrayGenerator;
 
@@ -143,6 +145,42 @@ namespace containers
             delete[] data;
             data = newData;
             capacity = newSize;
+        }
+
+        void InsertAt(const T &item, size_t index)
+        {
+            if (index > size)
+            {
+                throw Exceptions::InvalidIndex();
+            }
+
+            if (size == capacity)
+            {
+                Resize(capacity * 2 == 0 ? 1 : capacity * 2);
+            }
+
+            for (size_t i = size; i > index; i--)
+            {
+                data[i] = data[i - 1];
+            }
+
+            data[index] = item;
+            size++;
+        }
+
+        void RemoveAt(size_t index)
+        {
+            if (index >= size)
+            {
+                throw Exceptions::InvalidIndex();
+            }
+
+            for (size_t i = index; i < size - 1; i++)
+            {
+                data[i] = data[i + 1];
+            }
+
+            size--;
         }
 
         DynamicArray &operator=(const DynamicArray<T> &other)

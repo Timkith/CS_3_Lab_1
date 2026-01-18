@@ -97,55 +97,86 @@ TEST(LazySequence, ComplexChain)
     g->Next();
     ASSERT_FALSE(g->HasNext());
 }
+TEST(LazySequence, LazyGetAndCaching)
+{
+    DynamicArray<int> array{10, 20, 30, 40, 50};
+    LazySequence<int> seq(array);
 
-TEST(LazySequence, Fibonacci2Test)
+    ASSERT_EQ(seq.Get(2), 30);
+    ASSERT_EQ(seq.Get(0), 10);
+    ASSERT_EQ(seq.Get(1), 20);
+
+    ASSERT_THROW(seq.Get(10));
+}
+
+TEST(LazySequence, InfiniteFibonacci)
 {
     functors::Fib2Functor<int> fibFunc(0, 1);
-    auto gen = gens::functor<int>(fibFunc);
-    LazySequence<int> seq(smartptr::MoveRef(gen));
+    auto fibGen = gens::functor<int>(fibFunc);
+    LazySequence<int> seq(MoveRef(fibGen));
 
-    auto g = seq.GetGenerator();
+    ASSERT_TRUE(seq.GetLength().is_inf());
 
-    ASSERT_EQ(g->GetCurrent(), 0);
-    g->Next();
-    ASSERT_EQ(g->GetCurrent(), 1);
-    g->Next();
-    ASSERT_EQ(g->GetCurrent(), 2);
-    g->Next();
-    ASSERT_EQ(g->GetCurrent(), 3);
-    g->Next();
-    ASSERT_EQ(g->GetCurrent(), 5);
+    ASSERT_EQ(seq.Get(0), 1);
+    ASSERT_EQ(seq.Get(1), 2);
+    ASSERT_EQ(seq.Get(2), 3);
+    ASSERT_EQ(seq.Get(3), 5);
+
+    ASSERT_THROW(seq.GetLast());
 }
 
-TEST(LazySequence, Fibonacci3TestWithSubSequence)
+TEST(LazySequence, ConcatInfCheck)
 {
-    functors::Fib3Functor<int> fib3(0, 0, 1);
-    auto gen = gens::functor<int>(fib3);
-    LazySequence<int> seq(smartptr::MoveRef(gen));
+    DynamicArray<int> arr{1, 2, 3};
+    LazySequence<int> finite(arr);
 
-    auto sub = seq.GetSubSequence(3, 5);
-    auto g = sub.GetGenerator();
+    functors::Fib2Functor<int> fib(0, 1);
+    LazySequence<int> infinite(gens::functor<int>(fib));
 
-    ASSERT_TRUE(g->HasNext());
+    auto res = finite.Concat(MoveRef(infinite));
+
+    ASSERT_TRUE(res.GetLength().is_inf());
+
+    ASSERT_EQ(res.Get(2), 3);
+    ASSERT_EQ(res.Get(3), 1);
 }
 
-TEST(LazySequence, InfiniteAppendTest)
+TEST(LazySequence, GetLastFiniteFix)
 {
-    functors::Fib2Functor<int> fibFunc(0, 1);
-    LazySequence<int> seq(smartptr::MoveRef(gens::functor<int>(fibFunc)));
+    DynamicArray<int> array{100, 200, 300};
+    LazySequence<int> seq(array);
 
-    auto appended = seq.Append(999);
+    ASSERT_EQ(seq.GetLast(), 300);
 
-    auto g = appended.GetGenerator();
-    ASSERT_EQ(g->GetCurrent(), 0);
-    ASSERT_TRUE(g->HasNext());
+    ASSERT_FALSE(seq.GetLength().is_inf());
+    ASSERT_EQ(seq.GetLength().get_value(), 3);
 }
 
-TEST(LazySequence, FunctorHasNextAlwaysTrue)
+TEST(LazySequence, MovePreservesCache)
 {
-    functors::Fib2Functor<int> fib(1, 1);
-    auto gen = gens::functor<int>(fib);
-    ASSERT_TRUE(gen->HasNext());
-    gen->Next();
-    ASSERT_TRUE(gen->HasNext());
+    DynamicArray<int> array{1, 2, 3, 4, 5};
+    LazySequence<int> seq1(array);
+
+    ASSERT_EQ(seq1.Get(2), 3);
+
+    LazySequence<int> seq2(MoveRef(seq1));
+
+    ASSERT_EQ(seq2.Get(0), 1);
+    ASSERT_EQ(seq2.Get(1), 2);
+    ASSERT_EQ(seq2.Get(2), 3);
+
+    ASSERT_EQ(seq2.Get(3), 4);
+}
+
+TEST(LazySequence, LazyChainComplexity)
+{
+    functors::Fib2Functor<int> fib(0, 1);
+    LazySequence<int> seq(gens::functor<int>(fib));
+
+    auto sub = seq.GetSubSequence(2, 4);
+    
+    ASSERT_EQ(sub.Get(0), 3);
+    ASSERT_EQ(sub.Get(1), 5);
+    ASSERT_EQ(sub.Get(2), 8);
+    ASSERT_THROW(sub.Get(3));
 }

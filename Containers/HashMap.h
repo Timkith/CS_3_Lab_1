@@ -60,6 +60,8 @@ namespace containers {
             [[nodiscard]] bool HasNext() const override {
                 return _garse->HasNext() || _glist->HasNext();
             }
+
+            [[nodiscard]] bool GetGuar() const override{ return false;}
         };
 
         using Generator = HashMap<K, V, Hash>::HashMapGenerator;
